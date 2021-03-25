@@ -1,11 +1,4 @@
 
-[![GitHub Release][releases-shield]][releases]
-[![GitHub Activity][commits-shield]][commits]
-[![License][license-shield]](LICENSE)
-[![hacs][hacsbadge]][hacs]
-[![Project Maintenance][maintenance-shield]
-
-
 # Merge Light CT/RGB [[Home Assistant](https://www.home-assistant.io/) Component]
 ## join 2 light entities for the same device. useful for controlling unified devices that offer an entity for Color Temp and another RGB.
 
