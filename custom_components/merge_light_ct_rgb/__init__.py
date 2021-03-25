@@ -1,13 +1,7 @@
-"""
-Custom integration to integrate integration_blueprint with Home Assistant.
+import logging
 
-For more details about this integration, please refer to
-https://github.com/custom-components/integration_blueprint
-"""
-import asyncio
+_LOGGER = logging.getLogger(__name__)
 
-from homeassistant.core import Config, HomeAssistant
 
-async def async_setup(hass: HomeAssistant, config: Config):
-    """Set up this integration using YAML is not supported."""
+def setup(hass, config):
     return True

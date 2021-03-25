@@ -12,10 +12,12 @@ This component creates a single entity where you will have the control of color 
 #### Manual Installation:
 All of the files in the merge_light_ct_rgb folder must be placed under config/custom_components/merge_light_ct_rgb/. If copying and pasting, make sure to use the Raw button or the links below:
 
+```
 config/custom_components/merge_light_ct_rgb/__init__.py
 config/custom_components/merge_light_ct_rgb/light.py
 config/custom_components/merge_light_ct_rgb/const.py
 config/custom_components/merge_light_ct_rgb/manifest.json
+```
 
 #### Component Configuration:
 ```yaml

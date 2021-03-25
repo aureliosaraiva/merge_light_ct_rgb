@@ -56,9 +56,9 @@ class LightMerge(LightEntity, RestoreEntity):
         self._entity_id = "light." + entity_name
         self._state = None
         self._icon = ICON
-        self._hs_color = (355.03025897117345, 69.95997562089072)
-        self._brightness = 125
-        self._color_temp = 464
+        self._hs_color = None
+        self._brightness = None
+        self._color_temp = None
         self._current_light = None
 
         self._lights_ct = lights_ct
@@ -68,22 +68,40 @@ class LightMerge(LightEntity, RestoreEntity):
         self._supported_features |= SUPPORT_BRIGHTNESS
         self._supported_features |= SUPPORT_COLOR_TEMP
 
-    def update_light(self, state):
-        """Update device state."""
-        properties = state.as_dict()
-        attributes = properties['attributes']
+    def turn_on(self, **kwargs):
+        """Turn on device."""
+        if 'color_temp' in kwargs:
+            self._color_temp = kwargs['color_temp']
+            self._current_light = CURRENT_LIGHT_CT
 
-        if 'hs_color' in attributes:
-            self._hs_color = attributes['hs_color']
+        if 'hs_color' in kwargs:
+            self._hs_color = kwargs['hs_color']
+            self._current_light = CURRENT_LIGHT_RGB
 
-        if 'brightness' in attributes:
-            self._brightness = attributes['brightness']
+        if 'brightness' in kwargs:
+            self._brightness = kwargs['brightness']
 
-        if 'color_temp' in attributes:
-            self._color_temp = attributes['color_temp']
+        self._state = True
+        self._update_state()
 
-        if 'current_light' in attributes:
-            self._current_light = attributes['current_light']
+    def turn_off(self):
+        """Turn off device."""
+        self._state = False
+        self._update_state()
+
+    async def async_added_to_hass(self):
+        """Call when entity about to be added to hass."""
+        _LOGGER.info('async_added_to_hass')
+
+        await super().async_added_to_hass()
+        if self._state is not None:
+            return
+
+        state = await self.async_get_last_state()
+
+        self._update_light(state)
+        # self.update_light()
+        self._state = state and state.state == STATE_ON
 
     @property
     def supported_features(self):
@@ -104,20 +122,6 @@ class LightMerge(LightEntity, RestoreEntity):
     def is_on(self):
         """Return device state on/off."""
         return self._state
-
-    async def async_added_to_hass(self):
-        """Call when entity about to be added to hass."""
-        _LOGGER.info('async_added_to_hass')
-
-        await super().async_added_to_hass()
-        if self._state is not None:
-            return
-
-        state = await self.async_get_last_state()
-
-        self.update_light(state)
-        # self.update_light()
-        self._state = state and state.state == STATE_ON
 
     @property
     def icon(self):
@@ -152,23 +156,27 @@ class LightMerge(LightEntity, RestoreEntity):
         }
         return data
 
-    def turn_on(self, **kwargs):
-        """Turn on device."""
-        if 'color_temp' in kwargs:
-            self._color_temp = kwargs['color_temp']
-            self._current_light = CURRENT_LIGHT_CT
+    def _update_light(self, state):
+        """Update device state."""
+        if not state:
+            return None
 
-        if 'hs_color' in kwargs:
-            self._hs_color = kwargs['hs_color']
-            self._current_light = CURRENT_LIGHT_RGB
+        properties = state.as_dict()
+        attributes = properties['attributes']
 
-        if 'brightness' in kwargs:
-            self._brightness = kwargs['brightness']
+        if 'hs_color' in attributes:
+            self._hs_color = attributes['hs_color']
 
-        self._state = True
-        self.update_state()
+        if 'brightness' in attributes:
+            self._brightness = attributes['brightness']
 
-    def update_state(self):
+        if 'color_temp' in attributes:
+            self._color_temp = attributes['color_temp']
+
+        if 'current_light' in attributes:
+            self._current_light = attributes['current_light']
+
+    def _update_state(self):
         """Update device state."""
         hass = self.hass
 
@@ -194,8 +202,3 @@ class LightMerge(LightEntity, RestoreEntity):
                     'brightness': self._brightness
                 })
             self.schedule_update_ha_state()
-
-    def turn_off(self):
-        """Turn off device."""
-        self._state = False
-        self.update_state()
