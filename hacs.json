@@ -1,10 +1,8 @@
 {
-    "name": "Integration blueprint",
+    "name": "merge light ct_ rgb",
     "hacs": "1.6.0",
     "domains": [
-        "binary_sensor",
-        "sensor",
-        "switch"
+        "light"
     ],
     "iot_class": "Cloud Polling",
     "homeassistant": "0.118.0"
