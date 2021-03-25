@@ -1,6 +1,7 @@
 # Merge Light CT/RGB [[Home Assistant](https://www.home-assistant.io/) Component]
 ## join 2 light entities for the same device. useful for controlling unified devices that offer an entity for Color Temp and another RGB.
 
+![](img.jpeg)
 
 Merge Light CT / RGB is used to solve problems of some lighting devices that offers 2 different entities to control the lighting. Usually there is an entity to control the color temperature and another to control the RGB color.
 
@@ -38,3 +39,6 @@ Light configuration variables:
 * **name** (_Optional_): The name to use when displaying this switch.
 * **entity_id_light_ct** (_Required_): string: Light entities which should be set in Color Temp.
 * **entity_id_light_rgb** (_Required_): string: Light entities which should be set in RGB.
+
+## Todo
+- synchronize states when ct and rgb entity change
